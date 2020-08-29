@@ -19,11 +19,15 @@ class PostForm extends React.Component {
         event.preventDefault()
         const {title} = this.state
 
+        if (!title.trim()) {
+            return
+        }
+
         const newObj = {
             title, id: Date.now().toString()
         }
         this.props.createPost(newObj)
-        
+
         this.setState({title: ""})
         _title.focus()
     }
