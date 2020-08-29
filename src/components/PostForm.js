@@ -1,6 +1,8 @@
 import React from 'react'
+import { connect } from 'react-redux'
+import { createPost } from '../redux/actionPost';
 
-export default class Post extends React.Component {
+class PostForm extends React.Component {
 
     constructor (props) {
         super(props)
@@ -13,14 +15,17 @@ export default class Post extends React.Component {
     }
 
     submitHandler = (event) => {
+        const {_title} = this.refs
         event.preventDefault()
-
         const {title} = this.state
+
         const newObj = {
             title, id: Date.now().toString()
         }
-        console.log(newObj) 
-        this.setState({title:""})
+        this.props.createPost(newObj)
+        
+        this.setState({title: ""})
+        _title.focus()
     }
 
     changeSubmitHandler = (e) => {
@@ -30,18 +35,20 @@ export default class Post extends React.Component {
     }
 
     render () {
-        const {value} = this.state
+        const {title} = this.state
         return (
             <form onSubmit={this.submitHandler}>  
             <div className="form-group">
                 <label htmlFor="title">Post name</label>
                 <input 
+                 ref="_title"
                  type="text"
                  className="form-control"
                  id="title"
-                 value={value} 
+                 value={title} 
                  name="title"
                  onChange={this.changeSubmitHandler}
+                 
                  />
             </div>
              <button className="btn btn-success" type="submit">Make post</button>
@@ -49,3 +56,5 @@ export default class Post extends React.Component {
         )
     }
 }
+
+export default connect(null, {createPost})(PostForm)
